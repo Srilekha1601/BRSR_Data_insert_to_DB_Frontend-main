@@ -70,7 +70,7 @@ const Step1Upload = ({ onNext }: Step1Props) => {
     formData.append("template", excelTemplate);
 
     try {
-      const response = await fetch("http://192.168.1.86:8000//api/process/", {
+      const response = await fetch("http://192.168.1.142:8000//api/process/", {
         method: "POST",
         body: formData,
       });
