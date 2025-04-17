@@ -852,68 +852,70 @@ const Step2Selection = ({
         Step 2: Select Section Template
       </Typography>
 
-     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2, maxWidth: '800px', mx: 'auto' }}>
-  <FormControl fullWidth sx={{ mb: 2, maxWidth: 350 }}>
-    <InputLabel id="xlsx-files-label">Select XLSX File</InputLabel>
-    <Select
-      labelId="xlsx-files-label"
-      value={extractedfile}
-      onChange={handleFileChange}
-      label="Select XLSX File"
-    >
-      {files.map((file, index) => {
-        // Split on "_extracted_data_" and take the first part (company name)
-        const displayName = file.split("_extracted_data_")[0];
-        return (
-          <MenuItem key={index} value={file}>
-            {displayName}
-          </MenuItem>
-        );
-      })}
-    </Select>
-  </FormControl>
-
-  <FormControl fullWidth sx={{ mb: 2, maxWidth: 350 }} disabled={isIndividualSelected}>
-    <InputLabel id="all-section-label">Select All Sections</InputLabel>
-    <Select
-      labelId="all-section-label"
-      value={isAllSelected ? selectedSection : ""}
-      onChange={handleSectionChange}
-      label="Select All Sections"
-    >
-      <MenuItem value="all">All Sections</MenuItem>
-    </Select>
-  </FormControl>
-
-  <FormControl fullWidth sx={{ mb: 2, maxWidth: 350 }} disabled={isAllSelected}>
-    <InputLabel id="section-label">Select Individual Section</InputLabel>
-    <Select
-      labelId="section-label"
-      value={selectedSection || ""}
-      onChange={handleSectionChange}
-      label="Select Individual Section"
-    >
-      <MenuItem value="" disabled>
-        Select a template
-      </MenuItem>
-      {SECTIONS.filter((s) => s.id !== "all").map((section) => {
-        const isDisabled = processedSections.includes(section.id);
-        return (
-          <MenuItem
-            key={section.id}
-            value={section.id}
-            disabled={isDisabled}
-            style={isDisabled ? { color: "#222222" } : {}}
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2 }}>
+        <FormControl fullWidth sx={{ mb: 2 }}>
+          <InputLabel id="xlsx-files-label">Select XLSX File</InputLabel>
+          <Select
+            labelId="xlsx-files-label"
+            value={extractedfile}
+            onChange={handleFileChange}
+            label="Select XLSX File"
           >
-            {section.name}
-            {isDisabled && " (Already Processed)"}
-          </MenuItem>
-        );
-      })}
-    </Select>
-  </FormControl>
-</Box>
+            {files.map((file, index) => {
+              // Split on "_extracted_data_" and take the first part (company name)
+              const displayName = file.split("_extracted_data_")[0];
+              return (
+                <MenuItem key={index} value={file}>
+                  {displayName}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
 
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected}>
+          <InputLabel id="all-section-label">Select All Sections</InputLabel>
+          <Select
+            labelId="all-section-label"
+            value={isAllSelected ? selectedSection : ""}
+            onChange={handleSectionChange}
+            label="Select All Sections"
+          >
+            <MenuItem value="all">All Sections</MenuItem>
+          </Select>
+        </FormControl>
+
+
+
+
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isAllSelected}>
+          <InputLabel id="section-label">Select Individual Section</InputLabel>
+          <Select
+            labelId="section-label"
+            value={selectedSection || ""}
+            onChange={handleSectionChange}
+            label="Select Individual Section"
+          >
+            <MenuItem value="" disabled>
+              Select a template
+            </MenuItem>
+            {SECTIONS.filter((s) => s.id !== "all").map((section) => {
+              const isDisabled = processedSections.includes(section.id);
+              return (
+                <MenuItem
+                  key={section.id}
+                  value={section.id}
+                  disabled={isDisabled}
+                  style={isDisabled ? { color: "#222222" } : {}}
+                >
+                  {section.name}
+                  {isDisabled && " (Already Processed)"}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </Box>
 
       {/* <Box sx={{ my: 2 }}>
         <Typography>
@@ -956,7 +958,7 @@ const Step2Selection = ({
           <ConfirmationDialog
             open={openDialog}
             title="Confirm Completion"
-            message="Have you completed data insertion for all sections? Once confirmed, no further data can be added to this file unless you start from scratch."
+            message="Have you completed data insertion for all sections? Once confirmed, no further data can be added to this file unless you start from scratch"
             onConfirm={handleConfirm}
             onClose={handleCloseDialog}
 
