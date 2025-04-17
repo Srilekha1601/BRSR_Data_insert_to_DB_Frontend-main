@@ -419,7 +419,7 @@
 // export default Step2Selection;
 
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Card,
@@ -437,6 +437,8 @@ import {
   DialogContent,
   DialogActions,
   Grid,
+  Checkbox,
+  ListItemText,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -445,7 +447,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import InfoIcon from "@mui/icons-material/Info";
 import FileUpload from "./FileUpload";
-
+import ConfirmationDialog from "./ConfirmationDialog";
+import { useNavigate } from 'react-router-dom';
+import { setDate } from "date-fns";
+import { Snackbar, Alert as MuiAlert } from '@mui/material';
 interface Step2Props {
   onBack: () => void;
   onComplete: () => void;
@@ -500,9 +505,9 @@ const SECTIONS = [
   //   file: "dummy_template_sectionA - Copy.xlsx",
   //   templatePath: "/templates/dummy_template_sectionA - Copy.xlsx"
   // },
-  { 
-    id: "A", 
-    name: "Section A", 
+  {
+    id: "A",
+    name: "Section A",
     file: "Data_insert_BRSR_SectionA.xlsx",
     templatePath: "/templates/Data_insert_BRSR_SectionA.xlsx"
   },
@@ -556,6 +561,7 @@ const Step2Selection = ({
   processedSections,
   setProcessedSections
 }: Step2Props) => {
+  const [open, setOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File[] | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -567,7 +573,13 @@ const Step2Selection = ({
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const [showMessage, setShowMessage] = useState(false);
   const [showSectionInfo, setShowSectionInfo] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [extractedfile, setExtractedfile] = useState();
+  const [deletefile, setDeletefile] = useState(false)
+  const [openDialog, setOpenDialog] = useState(false);
 
+  const navigate = useNavigate();
   // const handleSectionChange = async (event: any) => {
   //   const sectionId = event.target.value;
   //   setSelectedSection(sectionId);
@@ -584,6 +596,36 @@ const Step2Selection = ({
   //     console.error("Error loading file:", error);
   //   }
   // };
+
+  const handleOpenDialog = () => setOpenDialog(true);
+  const handleCloseDialog = () => setOpenDialog(false);
+
+  const handleConfirm = async () => {
+    try {
+
+      const response = await fetch("http://192.168.1.86:8000/api/delete_inserted_files/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          extractedfile: extractedfile,
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        navigate('/completion');
+      } else {
+        console.error("API error:", response.statusText);
+
+      }
+    } catch (error) {
+      console.error("Network error:", error);
+    } finally {
+      setOpenDialog(false);
+    }
+  };
 
   const handleSectionChange = async (event: any) => {
     const sectionId = event.target.value;
@@ -690,6 +732,35 @@ const Step2Selection = ({
   //     setIsProcessing(false);
   //   }
   // };
+  useEffect(() => {
+
+    const fetchFiles = async () => {
+      try {
+        const response = await fetch('http://192.168.1.86:8000/api/list_files_in_directory/');
+        const data = await response.json();
+
+        if (data && data.files) {
+          setFiles(data.files);
+        } else {
+          console.error("No files found in the response.");
+        }
+      } catch (error) {
+        console.error("Error fetching files:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchFiles();
+  }, []);
+
+
+  const handleFileChange = (event) => {
+    setExtractedfile(event.target.value);
+
+  };
+
+
+
 
   const handleSubmit = async () => {
     if (!selectedSection) {
@@ -712,6 +783,7 @@ const Step2Selection = ({
           const fileName = Array.isArray(section.file) ? section.file[0] : section.file;
           const file = new File([blob], fileName, { type: blob.type });
           formData.append("section_template_file", file);
+          formData.append("extracted_data_filename", extractedfile);
         }
       } else {
         // Process individual section
@@ -728,9 +800,10 @@ const Step2Selection = ({
         const fileName = Array.isArray(section.file) ? section.file[0] : section.file;
         const file = new File([blob], fileName, { type: blob.type });
         formData.append("section_template_file", file);
+        formData.append("extracted_data_filename", extractedfile);
       }
 
-      const response = await fetch("http://192.168.1.142:8000/api/process-and-insert/", {
+      const response = await fetch("http://192.168.1.86:8000/api/process-and-insert/", {
         method: "POST",
         body: formData,
       });
@@ -779,51 +852,68 @@ const Step2Selection = ({
         Step 2: Select Section Template
       </Typography>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2 }}>
+     <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2, maxWidth: '800px', mx: 'auto' }}>
+  <FormControl fullWidth sx={{ mb: 2, maxWidth: 350 }}>
+    <InputLabel id="xlsx-files-label">Select XLSX File</InputLabel>
+    <Select
+      labelId="xlsx-files-label"
+      value={extractedfile}
+      onChange={handleFileChange}
+      label="Select XLSX File"
+    >
+      {files.map((file, index) => {
+        // Split on "_extracted_data_" and take the first part (company name)
+        const displayName = file.split("_extracted_data_")[0];
+        return (
+          <MenuItem key={index} value={file}>
+            {displayName}
+          </MenuItem>
+        );
+      })}
+    </Select>
+  </FormControl>
 
-        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected}>
-          <InputLabel id="all-section-label">Select All Sections</InputLabel>
-          <Select
-            labelId="all-section-label"
-            value={isAllSelected ? selectedSection : ""}
-            onChange={handleSectionChange}
-            label="Select All Sections"
+  <FormControl fullWidth sx={{ mb: 2, maxWidth: 350 }} disabled={isIndividualSelected}>
+    <InputLabel id="all-section-label">Select All Sections</InputLabel>
+    <Select
+      labelId="all-section-label"
+      value={isAllSelected ? selectedSection : ""}
+      onChange={handleSectionChange}
+      label="Select All Sections"
+    >
+      <MenuItem value="all">All Sections</MenuItem>
+    </Select>
+  </FormControl>
+
+  <FormControl fullWidth sx={{ mb: 2, maxWidth: 350 }} disabled={isAllSelected}>
+    <InputLabel id="section-label">Select Individual Section</InputLabel>
+    <Select
+      labelId="section-label"
+      value={selectedSection || ""}
+      onChange={handleSectionChange}
+      label="Select Individual Section"
+    >
+      <MenuItem value="" disabled>
+        Select a template
+      </MenuItem>
+      {SECTIONS.filter((s) => s.id !== "all").map((section) => {
+        const isDisabled = processedSections.includes(section.id);
+        return (
+          <MenuItem
+            key={section.id}
+            value={section.id}
+            disabled={isDisabled}
+            style={isDisabled ? { color: "#222222" } : {}}
           >
-            <MenuItem value="all">All Sections</MenuItem>
-          </Select>
-        </FormControl>
+            {section.name}
+            {isDisabled && " (Already Processed)"}
+          </MenuItem>
+        );
+      })}
+    </Select>
+  </FormControl>
+</Box>
 
-
-
-
-        <FormControl fullWidth sx={{ mb: 2 }} disabled={isAllSelected}>
-          <InputLabel id="section-label">Select Individual Section</InputLabel>
-          <Select
-            labelId="section-label"
-            value={selectedSection || ""}
-            onChange={handleSectionChange}
-            label="Select Individual Section"
-          >
-            <MenuItem value="" disabled>
-              Select a template
-            </MenuItem>
-            {SECTIONS.filter((s) => s.id !== "all").map((section) => {
-              const isDisabled = processedSections.includes(section.id);
-              return (
-                <MenuItem
-                  key={section.id}
-                  value={section.id}
-                  disabled={isDisabled}
-                  style={isDisabled ? { color: "#222222" } : {}}
-                >
-                  {section.name}
-                  {isDisabled && " (Already Processed)"}
-                </MenuItem>
-              );
-            })}
-          </Select>
-        </FormControl>
-      </Box>
 
       {/* <Box sx={{ my: 2 }}>
         <Typography>
@@ -858,6 +948,20 @@ const Step2Selection = ({
         >
           {isProcessing ? <CircularProgress size={20} /> : "Submit to Database"}
         </Button>
+        <>
+          <Button variant="contained" color="success" onClick={handleOpenDialog} disabled={!extractedfile}>
+            Processing Complete
+          </Button>
+
+          <ConfirmationDialog
+            open={openDialog}
+            title="Confirm Completion"
+            message="Have you completed data insertion for all sections? Once confirmed, no further data can be added to this file unless you start from scratch."
+            onConfirm={handleConfirm}
+            onClose={handleCloseDialog}
+
+          />
+        </>
       </Box>
 
       <Dialog
