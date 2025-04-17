@@ -137,10 +137,10 @@
 //       setShowSectionInfo(true);
 //       return;
 //     }
-   
+
 //     setIsProcessing(true);
 //     setResponseMessage(null);
-   
+
 //     try {
 //       const formData = new FormData();
 //       if (selectedSection === "all") {
@@ -154,31 +154,31 @@
 //         }
 //         formData.append("section_template_file", selectedFile);
 //       }
-   
+
 //       const response = await fetch("http://192.168.1.142:8000//api/process-and-insert/", {
 //         method: "POST",
 //         body: formData,
 //       });
-   
+
 //       const result = await response.json();
 //       if (response.ok) {
 //         setResponseMessage(result.message || "Upload successful");
 //         setShowMessage(true);
-   
+
 //         if (selectedSection === "all") {
 //           onComplete();
 //         } else {
 //           const updatedSections = [...processedSections, selectedSection];
 //           setProcessedSections(updatedSections);
-   
+
 //           const remainingSections = SECTIONS.filter(
 //             (section) => section.id !== "all" && !updatedSections.includes(section.id)
 //           );
-   
+
 //           if (remainingSections.length === 0) {
 //             onComplete();
 //           } else {
-            
+
 //             //const sectionLetter = selectedSection.replace('section', '');
 //             //console.log("sectionLetter",sectionLetter)
 //             setResponseMessage(`Section ${selectedSection} processed. Please continue with the next section.`);
@@ -436,6 +436,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
+  Grid,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import StorageIcon from "@mui/icons-material/Storage";
@@ -452,14 +453,46 @@ interface Step2Props {
   setProcessedSections: (sections: string[]) => void;
 }
 
+// // Mock data for sections
+// const SECTIONS = [
+
+//   {
+//     id: "all",
+//     name: "All Sections",
+//   },
+
+//   // {
+//   //   id: "A",
+//   //   name: "Section A",
+//   //   file: "dummy_template_sectionA_wrong.xlsx",
+//   //   templatePath: "/templates/dummy_template_sectionA_wrong.xlsx"
+//   // },
+//   {
+//     id: "A",
+//     name: "Section A",
+//     file: "dummy_template_sectionA.xlsx",
+//     templatePath: "/templates/dummy_template_sectionA.xlsx"
+//   },
+//   {
+//     id: "B",
+//     name: "Section B",
+//     file: "dummy_template_sectionB.xlsx",
+//     templatePath: "/templates/dummy_template_sectionB.xlsx"
+//   },
+//   {
+//     id: "C Principle 1",
+//     name: "Section C Princliple 1",
+//     file: "dummy_template_sectionC.xlsx",
+//     templatePath: "/templates/dummy_template_sectionC.xlsx"
+//   },
+// ];
+
 // Mock data for sections
 const SECTIONS = [
 
   {
     id: "all",
     name: "All Sections",
-    // file: ["dummy_template_sectionA.xlsx","dummy_template_sectionB.xlsx","dummy_template_sectionC.xlsx"],
-    // templatePath: ["/templates/dummy_template_sectionA.xlsx","/templates/dummy_template_sectionB.xlsx","/templates/dummy_template_sectionC.xlsx"]
   },
   // {
   //   id: "A",
@@ -470,87 +503,52 @@ const SECTIONS = [
   { 
     id: "A", 
     name: "Section A", 
-    file: "dummy_template_sectionA.xlsx",
-    templatePath: "/templates/dummy_template_sectionA.xlsx"
+    file: "Data_insert_BRSR_SectionA.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionA.xlsx"
   },
   {
     id: "B",
     name: "Section B",
-    file: "dummy_template_sectionB.xlsx",
-    templatePath: "/templates/dummy_template_sectionB.xlsx"
+    file: "Data_insert_BRSR_SectionB.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionB.xlsx"
   },
   {
     id: "C Principle 1",
     name: "Section C Princliple 1",
-    file: "dummy_template_sectionC.xlsx",
-    templatePath: "/templates/dummy_template_sectionC.xlsx"
+    file: "Data_insert_BRSR_SectionC_P1.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P1.xlsx"
+  },
+  {
+    id: "C Principle 2",
+    name: "Section C Princliple 2",
+    file: "Data_insert_BRSR_SectionC_P2.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P2.xlsx"
+  },
+  {
+    id: "C Principle 3",
+    name: "Section C Princliple 3",
+    file: "Data_insert_BRSR_SectionC_P3.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P3.xlsx"
+  },
+  {
+    id: "C Principle 4,5",
+    name: "Section C Princliple 4 and 5",
+    file: "Data_insert_BRSR_SectionC_P4,P5.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P4,P5.xlsx"
+  },
+  {
+    id: "C Principle 6",
+    name: "Section C Princliple 6",
+    file: "Data_insert_BRSR_SectionC_P6.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P6.xlsx"
+  },
+  {
+    id: "C Principle 7,8,9",
+    name: "Section C Princliple 7,8 and 9",
+    file: "Data_insert_BRSR_SectionC_P7,P8,P9.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P7,P8,P9.xlsx"
   },
 ];
-
-// // Mock data for sections
-// const SECTIONS = [
-
-//   {
-//     id: "all",
-//     name: "All Sections",
-//     file: ["dummy_template_sectionA.xlsx","dummy_template_sectionB.xlsx","dummy_template_sectionC.xlsx"],
-//     templatePath: ["/templates/dummy_template_sectionA.xlsx","/templates/dummy_template_sectionB.xlsx","/templates/dummy_template_sectionC.xlsx"]
-//   },
-//   // {
-//   //   id: "A",
-//   //   name: "Section A",
-//   //   file: "dummy_template_sectionA - Copy.xlsx",
-//   //   templatePath: "/templates/dummy_template_sectionA - Copy.xlsx"
-//   // },
-//   { 
-//     id: "A", 
-//     name: "Section A", 
-//     file: "Data_insert_using_template_BRSR_dev_SectionA.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionA.xlsx"
-//   },
-//   {
-//     id: "B",
-//     name: "Section B",
-//     file: "Data_insert_using_template_BRSR_dev_SectionB.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionB.xlsx"
-//   },
-//   {
-//     id: "C Principle 1",
-//     name: "Section C Princliple 1",
-//     file: "Data_insert_using_template_BRSR_dev_SectionC_P1.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionC_P1.xlsx"
-//   },
-//   {
-//     id: "C Principle 2",
-//     name: "Section C Princliple 2",
-//     file: "Data_insert_using_template_BRSR_dev_SectionC_P2.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionC_P2.xlsx"
-//   },
-//   {
-//     id: "C Principle 3",
-//     name: "Section C Princliple 3",
-//     file: "Data_insert_using_template_BRSR_dev_SectionC_P3.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionC_P3.xlsx"
-//   },
-//   {
-//     id: "C Principle 4,5",
-//     name: "Section C Princliple 4 and 5",
-//     file: "Data_insert_using_template_BRSR_dev_SectionC_P4,P5.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionC_P4,P5.xlsx"
-//   },
-//   {
-//     id: "C Principle 6",
-//     name: "Section C Princliple 6",
-//     file: "Data_insert_using_template_BRSR_dev_SectionC_P6.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionC_P6.xlsx"
-//   },
-//   {
-//     id: "C Principle 7,8,9",
-//     name: "Section C Princliple 7,8 and 9",
-//     file: "Data_insert_using_template_BRSR_dev_SectionC_P7,P8,P9.xlsx",
-//     templatePath: "/templates/Data_insert_using_template_BRSR_dev_SectionC_P7,P8,P9.xlsx"
-//   },
-// ];
 
 const Step2Selection = ({
   onBack,
@@ -559,7 +557,7 @@ const Step2Selection = ({
   setProcessedSections
 }: Step2Props) => {
   const [selectedSection, setSelectedSection] = useState<string>("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File[] | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [statusDetails, setStatusDetails] = useState<{
@@ -590,10 +588,10 @@ const Step2Selection = ({
   const handleSectionChange = async (event: any) => {
     const sectionId = event.target.value;
     setSelectedSection(sectionId);
-  
+
     const section = SECTIONS.find((s) => s.id === sectionId);
     if (!section) return;
-  
+
     try {
       if (sectionId === "all") {
         // Handle "All Sections" selection
@@ -607,7 +605,8 @@ const Step2Selection = ({
             return new File([blob], fileName, { type: blob.type });
           })
         );
-        setSelectedFile(files[0]); // Set the first file as selected
+        //setSelectedFile(files[0]); // Set the first file as selected
+        setSelectedFile(files);
       } else {
         // Handle individual section selection
         const templatePath = Array.isArray(section.templatePath) ? section.templatePath[0] : section.templatePath;
@@ -615,7 +614,7 @@ const Step2Selection = ({
         const blob = await res.blob();
         const fileName = Array.isArray(section.file) ? section.file[0] : section.file;
         const file = new File([blob], fileName, { type: blob.type });
-        setSelectedFile(file);
+        setSelectedFile([file]);
       }
     } catch (error) {
       console.error("Error loading file:", error);
@@ -630,10 +629,10 @@ const Step2Selection = ({
   //     setShowSectionInfo(true);
   //     return;
   //   }
-   
+
   //   setIsProcessing(true);
   //   setResponseMessage(null);
-   
+
   //   try {
   //     const formData = new FormData();
   //     if (selectedSection === "all") {
@@ -647,31 +646,31 @@ const Step2Selection = ({
   //       }
   //       formData.append("section_template_file", selectedFile);
   //     }
-   
+
   //     const response = await fetch("http://192.168.1.86:8000//api/process-and-insert/", {
   //       method: "POST",
   //       body: formData,
   //     });
-   
+
   //     const result = await response.json();
   //     if (response.ok) {
   //       setResponseMessage(result.message || "Upload successful");
   //       setShowMessage(true);
-   
+
   //       if (selectedSection === "all") {
   //         onComplete();
   //       } else {
   //         const updatedSections = [...processedSections, selectedSection];
   //         setProcessedSections(updatedSections);
-   
+
   //         const remainingSections = SECTIONS.filter(
   //           (section) => section.id !== "all" && !updatedSections.includes(section.id)
   //         );
-   
+
   //         if (remainingSections.length === 0) {
   //           onComplete();
   //         } else {
-            
+
   //           //const sectionLetter = selectedSection.replace('section', '');
   //           //console.log("sectionLetter",sectionLetter)
   //           setResponseMessage(`Section ${selectedSection} processed. Please continue with the next section.`);
@@ -697,10 +696,10 @@ const Step2Selection = ({
       setShowSectionInfo(true);
       return;
     }
-  
+
     setIsProcessing(true);
     setResponseMessage(null);
-  
+
     try {
       const formData = new FormData();
       if (selectedSection === "all") {
@@ -730,27 +729,27 @@ const Step2Selection = ({
         const file = new File([blob], fileName, { type: blob.type });
         formData.append("section_template_file", file);
       }
-  
+
       const response = await fetch("http://192.168.1.142:8000/api/process-and-insert/", {
         method: "POST",
         body: formData,
       });
-  
+
       const result = await response.json();
       if (response.ok) {
         setResponseMessage(result.message || "Upload successful");
         setShowMessage(true);
-  
+
         if (selectedSection === "all") {
           onComplete();
         } else {
           const updatedSections = [...processedSections, selectedSection];
           setProcessedSections(updatedSections);
-  
+
           const remainingSections = SECTIONS.filter(
             (section) => section.id !== "all" && !updatedSections.includes(section.id)
           );
-  
+
           if (remainingSections.length === 0) {
             onComplete();
           } else {
@@ -772,58 +771,78 @@ const Step2Selection = ({
     }
   };
 
+  console.log("selectedFile", selectedFile);
+
   return (
     <Box sx={{ p: 3 }}>
       <Typography variant="h6" gutterBottom>
         Step 2: Select Section Template
       </Typography>
 
-      <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected}>
-        <InputLabel id="all-section-label">Select All Sections</InputLabel>
-        <Select
-          labelId="all-section-label"
-          value={isAllSelected ? selectedSection : ""}
-          onChange={handleSectionChange}
-          label="Select All Sections"
-        >
-          <MenuItem value="all">All Sections</MenuItem>
-        </Select>
-      </FormControl>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2 }}>
 
-      <FormControl fullWidth sx={{ mb: 2 }} disabled={isAllSelected}>
-        <InputLabel id="section-label">Select Individual Section</InputLabel>
-        <Select
-          labelId="section-label"
-          value={selectedSection || ""}
-          onChange={handleSectionChange}
-          label="Select Individual Section"
-        >
-          <MenuItem value="" disabled>
-            Select a template
-          </MenuItem>
-          {SECTIONS.filter((s) => s.id !== "all").map((section) => {
-            const isDisabled = processedSections.includes(section.id);
-            return (
-              <MenuItem
-                key={section.id}
-                value={section.id}
-                disabled={isDisabled}
-                style={isDisabled ? { color: "#222222" } : {}}
-              >
-                {section.name}
-                {isDisabled && " (Already Processed)"}
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </FormControl>
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected}>
+          <InputLabel id="all-section-label">Select All Sections</InputLabel>
+          <Select
+            labelId="all-section-label"
+            value={isAllSelected ? selectedSection : ""}
+            onChange={handleSectionChange}
+            label="Select All Sections"
+          >
+            <MenuItem value="all">All Sections</MenuItem>
+          </Select>
+        </FormControl>
 
-      <Box sx={{ my: 2 }}>
+
+
+
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isAllSelected}>
+          <InputLabel id="section-label">Select Individual Section</InputLabel>
+          <Select
+            labelId="section-label"
+            value={selectedSection || ""}
+            onChange={handleSectionChange}
+            label="Select Individual Section"
+          >
+            <MenuItem value="" disabled>
+              Select a template
+            </MenuItem>
+            {SECTIONS.filter((s) => s.id !== "all").map((section) => {
+              const isDisabled = processedSections.includes(section.id);
+              return (
+                <MenuItem
+                  key={section.id}
+                  value={section.id}
+                  disabled={isDisabled}
+                  style={isDisabled ? { color: "#222222" } : {}}
+                >
+                  {section.name}
+                  {isDisabled && " (Already Processed)"}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </Box>
+
+      {/* <Box sx={{ my: 2 }}>
         <Typography>
           Selected File:{" "}
           <strong>{selectedFile ? selectedFile.name : "None"}</strong>
         </Typography>
+      </Box> */}
+
+      <Box sx={{ my: 2 }}>
+        <Typography>
+          Selected File:{" "}
+          <strong>
+            {Array.isArray(selectedFile) && selectedFile.length > 0
+              ? selectedFile.map(f => f.name).join(", ")
+              : "None"}
+          </strong>
+        </Typography>
       </Box>
+
 
       <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
         <Button variant="outlined" onClick={onBack}>
@@ -837,7 +856,7 @@ const Step2Selection = ({
           disabled={!selectedFile || isProcessing}
           onClick={handleSubmit}
         >
-          {isProcessing ? <CircularProgress size={20} /> : "Upload"}
+          {isProcessing ? <CircularProgress size={20} /> : "Submit to Database"}
         </Button>
       </Box>
 
@@ -854,7 +873,7 @@ const Step2Selection = ({
           }
         }}
       >
-        <DialogTitle 
+        <DialogTitle
           id="response-dialog-title"
           sx={{
             background: "#0EA5E9",
@@ -883,9 +902,9 @@ const Step2Selection = ({
           )}
         </DialogTitle>
         <DialogContent sx={{ py: 3 }}>
-          <Box sx={{ 
-            display: "flex", 
-            alignItems: "center", 
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
             gap: 2,
             p: 2,
             borderRadius: 1,
@@ -913,8 +932,8 @@ const Step2Selection = ({
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>
-          <Button 
-            onClick={() => setShowMessage(false)} 
+          <Button
+            onClick={() => setShowMessage(false)}
             variant="contained"
             sx={{
               background: "#0EA5E9",
@@ -941,7 +960,7 @@ const Step2Selection = ({
           }
         }}
       >
-        <DialogTitle 
+        <DialogTitle
           id="section-info-dialog-title"
           sx={{
             background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
@@ -956,8 +975,8 @@ const Step2Selection = ({
           Section Selection Required
         </DialogTitle>
         <DialogContent sx={{ py: 3 }}>
-          <Box sx={{ 
-            display: "flex", 
+          <Box sx={{
+            display: "flex",
             flexDirection: "column",
             gap: 2,
             p: 2,
@@ -971,8 +990,8 @@ const Step2Selection = ({
           </Box>
         </DialogContent>
         <DialogActions sx={{ p: 2, pt: 0 }}>
-          <Button 
-            onClick={() => setShowSectionInfo(false)} 
+          <Button
+            onClick={() => setShowSectionInfo(false)}
             variant="contained"
             sx={{
               background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
