@@ -459,101 +459,101 @@ interface Step2Props {
 }
 
 // // Mock data for sections
-// const SECTIONS = [
-
-//   {
-//     id: "all",
-//     name: "All Sections",
-//   },
-
-//   // {
-//   //   id: "A",
-//   //   name: "Section A",
-//   //   file: "dummy_template_sectionA_wrong.xlsx",
-//   //   templatePath: "/templates/dummy_template_sectionA_wrong.xlsx"
-//   // },
-//   {
-//     id: "A",
-//     name: "Section A",
-//     file: "dummy_template_sectionA.xlsx",
-//     templatePath: "/templates/dummy_template_sectionA.xlsx"
-//   },
-//   {
-//     id: "B",
-//     name: "Section B",
-//     file: "dummy_template_sectionB.xlsx",
-//     templatePath: "/templates/dummy_template_sectionB.xlsx"
-//   },
-//   {
-//     id: "C Principle 1",
-//     name: "Section C Princliple 1",
-//     file: "dummy_template_sectionC.xlsx",
-//     templatePath: "/templates/dummy_template_sectionC.xlsx"
-//   },
-// ];
-
-// Mock data for sections
 const SECTIONS = [
 
   {
     id: "all",
     name: "All Sections",
   },
+
   // {
   //   id: "A",
   //   name: "Section A",
-  //   file: "dummy_template_sectionA - Copy.xlsx",
-  //   templatePath: "/templates/dummy_template_sectionA - Copy.xlsx"
+  //   file: "dummy_template_sectionA_wrong.xlsx",
+  //   templatePath: "/templates/dummy_template_sectionA_wrong.xlsx"
   // },
   {
     id: "A",
     name: "Section A",
-    file: "Data_insert_BRSR_SectionA.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionA.xlsx"
+    file: "dummy_template_sectionA.xlsx",
+    templatePath: "/templates/dummy_template_sectionA.xlsx"
   },
   {
     id: "B",
     name: "Section B",
-    file: "Data_insert_BRSR_SectionB.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionB.xlsx"
+    file: "dummy_template_sectionB.xlsx",
+    templatePath: "/templates/dummy_template_sectionB.xlsx"
   },
-  {
-    id: "C Principle 1",
-    name: "Section C Princliple 1",
-    file: "Data_insert_BRSR_SectionC_P1.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionC_P1.xlsx"
-  },
-  {
-    id: "C Principle 2",
-    name: "Section C Princliple 2",
-    file: "Data_insert_BRSR_SectionC_P2.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionC_P2.xlsx"
-  },
-  {
-    id: "C Principle 3",
-    name: "Section C Princliple 3",
-    file: "Data_insert_BRSR_SectionC_P3.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionC_P3.xlsx"
-  },
-  {
-    id: "C Principle 4,5",
-    name: "Section C Princliple 4 and 5",
-    file: "Data_insert_BRSR_SectionC_P4,P5.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionC_P4,P5.xlsx"
-  },
-  {
-    id: "C Principle 6",
-    name: "Section C Princliple 6",
-    file: "Data_insert_BRSR_SectionC_P6.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionC_P6.xlsx"
-  },
-  {
-    id: "C Principle 7,8,9",
-    name: "Section C Princliple 7,8 and 9",
-    file: "Data_insert_BRSR_SectionC_P7,P8,P9.xlsx",
-    templatePath: "/templates/Data_insert_BRSR_SectionC_P7,P8,P9.xlsx"
-  },
+  // {
+  //   id: "C Principle 1",
+  //   name: "Section C Princliple 1",
+  //   file: "dummy_template_sectionC.xlsx",
+  //   templatePath: "/templates/dummy_template_sectionC.xlsx"
+  // },
 ];
+
+// Mock data for sections
+// const SECTIONS = [
+
+//   {
+//     id: "all",
+//     name: "All Sections",
+//   },
+//   // {
+//   //   id: "A",
+//   //   name: "Section A",
+//   //   file: "dummy_template_sectionA - Copy.xlsx",
+//   //   templatePath: "/templates/dummy_template_sectionA - Copy.xlsx"
+//   // },
+//   {
+//     id: "A",
+//     name: "Section A",
+//     file: "Data_insert_BRSR_SectionA.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionA.xlsx"
+//   },
+//   {
+//     id: "B",
+//     name: "Section B",
+//     file: "Data_insert_BRSR_SectionB.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionB.xlsx"
+//   },
+//   {
+//     id: "C Principle 1",
+//     name: "Section C Princliple 1",
+//     file: "Data_insert_BRSR_SectionC_P1.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionC_P1.xlsx"
+//   },
+//   {
+//     id: "C Principle 2",
+//     name: "Section C Princliple 2",
+//     file: "Data_insert_BRSR_SectionC_P2.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionC_P2.xlsx"
+//   },
+//   {
+//     id: "C Principle 3",
+//     name: "Section C Princliple 3",
+//     file: "Data_insert_BRSR_SectionC_P3.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionC_P3.xlsx"
+//   },
+//   {
+//     id: "C Principle 4,5",
+//     name: "Section C Princliple 4 and 5",
+//     file: "Data_insert_BRSR_SectionC_P4,P5.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionC_P4,P5.xlsx"
+//   },
+//   {
+//     id: "C Principle 6",
+//     name: "Section C Princliple 6",
+//     file: "Data_insert_BRSR_SectionC_P6.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionC_P6.xlsx"
+//   },
+//   {
+//     id: "C Principle 7,8,9",
+//     name: "Section C Princliple 7,8 and 9",
+//     file: "Data_insert_BRSR_SectionC_P7,P8,P9.xlsx",
+//     templatePath: "/templates/Data_insert_BRSR_SectionC_P7,P8,P9.xlsx"
+//   },
+// ];
 
 const Step2Selection = ({
   onBack,
@@ -575,10 +575,10 @@ const Step2Selection = ({
   const [showSectionInfo, setShowSectionInfo] = useState(false);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [extractedfile, setExtractedfile] = useState();
+  const [extractedfile, setExtractedfile] = useState<string | null>(null);
   const [deletefile, setDeletefile] = useState(false)
   const [openDialog, setOpenDialog] = useState(false);
-
+  const [fileCount, setFileCount] = useState(0);
   const navigate = useNavigate();
   // const handleSectionChange = async (event: any) => {
   //   const sectionId = event.target.value;
@@ -596,13 +596,23 @@ const Step2Selection = ({
   //     console.error("Error loading file:", error);
   //   }
   // };
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+  
+
 
   const handleOpenDialog = () => setOpenDialog(true);
   const handleCloseDialog = () => setOpenDialog(false);
 
   const handleConfirm = async () => {
+    // if (fileCount === 0) {
+    //   navigate('/completion');
+    //   setOpenDialog(false);
+    //   return;
+    // }
+  
     try {
-
       const response = await fetch("http://192.168.1.86:8000/api/delete_inserted_files/", {
         method: "POST",
         headers: {
@@ -612,13 +622,24 @@ const Step2Selection = ({
           extractedfile: extractedfile,
         }),
       });
-
+  
       if (response.ok) {
         const result = await response.json();
-        navigate('/completion');
+  
+        // If backend says "No files found", navigate to completion
+      
+          // Otherwise update list and reset selection
+          setTimeout(async () => {
+            const files = await fetchFiles();
+            setExtractedfile("");
+          
+            if (files && files.length === 0) {
+              navigate("/completion");
+            }
+          }, 300);
+          setExtractedfile("");
       } else {
         console.error("API error:", response.statusText);
-
       }
     } catch (error) {
       console.error("Network error:", error);
@@ -626,6 +647,7 @@ const Step2Selection = ({
       setOpenDialog(false);
     }
   };
+  
 
   const handleSectionChange = async (event: any) => {
     const sectionId = event.target.value;
@@ -732,26 +754,30 @@ const Step2Selection = ({
   //     setIsProcessing(false);
   //   }
   // };
-  useEffect(() => {
+ 
 
-    const fetchFiles = async () => {
-      try {
-        const response = await fetch('http://192.168.1.86:8000/api/list_files_in_directory/');
-        const data = await response.json();
-
-        if (data && data.files) {
-          setFiles(data.files);
-        } else {
-          console.error("No files found in the response.");
-        }
-      } catch (error) {
-        console.error("Error fetching files:", error);
-      } finally {
-        setLoading(false);
+  const fetchFiles = async (): Promise<string[] | null> => {
+    try {
+      const response = await fetch('http://192.168.1.86:8000/api/list_files_in_directory/');
+      const data = await response.json();
+      console.log("Fetched files after delete:", data);
+  
+      if (data && Array.isArray(data.files)) {
+        setFiles(data.files); // still updates state
+        return data.files;
+      } else {
+        console.error("No files found in the response.");
+        return [];
       }
-    };
-    fetchFiles();
-  }, []);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
 
 
   const handleFileChange = (event) => {
