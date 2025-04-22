@@ -442,6 +442,7 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import StorageIcon from "@mui/icons-material/Storage";
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import TableViewIcon from "@mui/icons-material/TableView";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
@@ -451,6 +452,8 @@ import ConfirmationDialog from "./ConfirmationDialog";
 import { useNavigate } from 'react-router-dom';
 import { setDate } from "date-fns";
 import { Snackbar, Alert as MuiAlert } from '@mui/material';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 interface Step2Props {
   onBack: () => void;
   onComplete: () => void;
@@ -458,102 +461,102 @@ interface Step2Props {
   setProcessedSections: (sections: string[]) => void;
 }
 
-// // Mock data for sections
-const SECTIONS = [
-
-  {
-    id: "all",
-    name: "All Sections",
-  },
-
-  // {
-  //   id: "A",
-  //   name: "Section A",
-  //   file: "dummy_template_sectionA_wrong.xlsx",
-  //   templatePath: "/templates/dummy_template_sectionA_wrong.xlsx"
-  // },
-  {
-    id: "A",
-    name: "Section A",
-    file: "dummy_template_sectionA.xlsx",
-    templatePath: "/templates/dummy_template_sectionA.xlsx"
-  },
-  {
-    id: "B",
-    name: "Section B",
-    file: "dummy_template_sectionB.xlsx",
-    templatePath: "/templates/dummy_template_sectionB.xlsx"
-  },
-  // {
-  //   id: "C Principle 1",
-  //   name: "Section C Princliple 1",
-  //   file: "dummy_template_sectionC.xlsx",
-  //   templatePath: "/templates/dummy_template_sectionC.xlsx"
-  // },
-];
-
-// Mock data for sections
+// // // Mock data for sections
 // const SECTIONS = [
 
 //   {
 //     id: "all",
 //     name: "All Sections",
 //   },
+
 //   // {
 //   //   id: "A",
 //   //   name: "Section A",
-//   //   file: "dummy_template_sectionA - Copy.xlsx",
-//   //   templatePath: "/templates/dummy_template_sectionA - Copy.xlsx"
+//   //   file: "dummy_template_sectionA_wrong.xlsx",
+//   //   templatePath: "/templates/dummy_template_sectionA_wrong.xlsx"
 //   // },
 //   {
 //     id: "A",
 //     name: "Section A",
-//     file: "Data_insert_BRSR_SectionA.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionA.xlsx"
+//     file: "dummy_template_sectionA.xlsx",
+//     templatePath: "/templates/dummy_template_sectionA.xlsx"
 //   },
 //   {
 //     id: "B",
 //     name: "Section B",
-//     file: "Data_insert_BRSR_SectionB.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionB.xlsx"
+//     file: "dummy_template_sectionB.xlsx",
+//     templatePath: "/templates/dummy_template_sectionB.xlsx"
 //   },
 //   {
 //     id: "C Principle 1",
 //     name: "Section C Princliple 1",
-//     file: "Data_insert_BRSR_SectionC_P1.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionC_P1.xlsx"
-//   },
-//   {
-//     id: "C Principle 2",
-//     name: "Section C Princliple 2",
-//     file: "Data_insert_BRSR_SectionC_P2.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionC_P2.xlsx"
-//   },
-//   {
-//     id: "C Principle 3",
-//     name: "Section C Princliple 3",
-//     file: "Data_insert_BRSR_SectionC_P3.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionC_P3.xlsx"
-//   },
-//   {
-//     id: "C Principle 4,5",
-//     name: "Section C Princliple 4 and 5",
-//     file: "Data_insert_BRSR_SectionC_P4,P5.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionC_P4,P5.xlsx"
-//   },
-//   {
-//     id: "C Principle 6",
-//     name: "Section C Princliple 6",
-//     file: "Data_insert_BRSR_SectionC_P6.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionC_P6.xlsx"
-//   },
-//   {
-//     id: "C Principle 7,8,9",
-//     name: "Section C Princliple 7,8 and 9",
-//     file: "Data_insert_BRSR_SectionC_P7,P8,P9.xlsx",
-//     templatePath: "/templates/Data_insert_BRSR_SectionC_P7,P8,P9.xlsx"
+//     file: "dummy_template_sectionC.xlsx",
+//     templatePath: "/templates/dummy_template_sectionC.xlsx"
 //   },
 // ];
+
+// Mock data for sections
+const SECTIONS = [
+
+  {
+    id: "all",
+    name: "All Sections",
+  },
+  // {
+  //   id: "A",
+  //   name: "Section A",
+  //   file: "dummy_template_sectionA - Copy.xlsx",
+  //   templatePath: "/templates/dummy_template_sectionA - Copy.xlsx"
+  // },
+  {
+    id: "A",
+    name: "Section A",
+    file: "Data_insert_BRSR_SectionA.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionA.xlsx"
+  },
+  {
+    id: "B",
+    name: "Section B",
+    file: "Data_insert_BRSR_SectionB.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionB.xlsx"
+  },
+  {
+    id: "C Principle 1",
+    name: "Section C Princliple 1",
+    file: "Data_insert_BRSR_SectionC_P1.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P1.xlsx"
+  },
+  {
+    id: "C Principle 2",
+    name: "Section C Princliple 2",
+    file: "Data_insert_BRSR_SectionC_P2.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P2.xlsx"
+  },
+  {
+    id: "C Principle 3",
+    name: "Section C Princliple 3",
+    file: "Data_insert_BRSR_SectionC_P3.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P3.xlsx"
+  },
+  {
+    id: "C Principle 4,5",
+    name: "Section C Princliple 4 and 5",
+    file: "Data_insert_BRSR_SectionC_P4,P5.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P4,P5.xlsx"
+  },
+  {
+    id: "C Principle 6",
+    name: "Section C Princliple 6",
+    file: "Data_insert_BRSR_SectionC_P6.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P6.xlsx"
+  },
+  {
+    id: "C Principle 7,8,9",
+    name: "Section C Princliple 7,8 and 9",
+    file: "Data_insert_BRSR_SectionC_P7,P8,P9.xlsx",
+    templatePath: "/templates/Data_insert_BRSR_SectionC_P7,P8,P9.xlsx"
+  },
+];
 
 const Step2Selection = ({
   onBack,
@@ -580,26 +583,11 @@ const Step2Selection = ({
   const [openDialog, setOpenDialog] = useState(false);
   const [fileCount, setFileCount] = useState(0);
   const navigate = useNavigate();
-  // const handleSectionChange = async (event: any) => {
-  //   const sectionId = event.target.value;
-  //   setSelectedSection(sectionId);
 
-  //   const section = SECTIONS.find((s) => s.id === sectionId);
-  //   if (!section) return;
-
-  //   try {
-  //     const res = await fetch(section.templatePath);
-  //     const blob = await res.blob();
-  //     const file = new File([blob], section.file, { type: blob.type });
-  //     setSelectedFile(file);
-  //   } catch (error) {
-  //     console.error("Error loading file:", error);
-  //   }
-  // };
   useEffect(() => {
     fetchFiles();
   }, []);
-  
+
 
 
   const handleOpenDialog = () => setOpenDialog(true);
@@ -611,9 +599,9 @@ const Step2Selection = ({
     //   setOpenDialog(false);
     //   return;
     // }
-  
+
     try {
-      const response = await fetch("http://192.168.1.86:8000/api/delete_inserted_files/", {
+      const response = await fetch("http://192.168.1.142:8000/api/delete_inserted_files/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -622,32 +610,45 @@ const Step2Selection = ({
           extractedfile: extractedfile,
         }),
       });
-  
+
+      console.log("response", response);
+
       if (response.ok) {
-        const result = await response.json();
-  
+        const text = await response.text();
+        const result = JSON.parse(text);
+        //console.log("result", result);
+        setResponseMessage(result.message);
+        setShowMessage(true);
+        
         // If backend says "No files found", navigate to completion
-      
-          // Otherwise update list and reset selection
-          setTimeout(async () => {
-            const files = await fetchFiles();
-            setExtractedfile("");
-          
-            if (files && files.length === 0) {
-              navigate("/completion");
-            }
-          }, 300);
+
+        // Otherwise update list and reset selection
+        setTimeout(async () => {
+          const files = await fetchFiles();
           setExtractedfile("");
+
+          if (files && files.length === 0) {
+            navigate("/completion");
+          }
+        }, 300);
+        setExtractedfile("");
       } else {
-        console.error("API error:", response.statusText);
+        const text = await response.text();
+        const result = JSON.parse(text);
+        //console.log("result", result);
+        setResponseMessage(result.error);
+        setShowMessage(true);
+        //console.error("API error:", response.statusText);
       }
     } catch (error) {
-      console.error("Network error:", error);
+      setResponseMessage(error);
+      setShowMessage(true);
+      //console.error("Network error:", error);
     } finally {
       setOpenDialog(false);
     }
   };
-  
+
 
   const handleSectionChange = async (event: any) => {
     const sectionId = event.target.value;
@@ -688,80 +689,14 @@ const Step2Selection = ({
   const isAllSelected = selectedSection === "all";
   const isIndividualSelected = selectedSection && selectedSection !== "all";
 
-  // const handleSubmit = async () => {
-  //   if (!selectedSection) {
-  //     setShowSectionInfo(true);
-  //     return;
-  //   }
 
-  //   setIsProcessing(true);
-  //   setResponseMessage(null);
-
-  //   try {
-  //     const formData = new FormData();
-  //     if (selectedSection === "all") {
-  //       formData.append("process_all", "true");
-  //     } else {
-  //       if (!selectedFile) {
-  //         setResponseMessage("Please select a valid file.");
-  //         setShowMessage(true);
-  //         setIsProcessing(false);
-  //         return;
-  //       }
-  //       formData.append("section_template_file", selectedFile);
-  //     }
-
-  //     const response = await fetch("http://192.168.1.86:8000//api/process-and-insert/", {
-  //       method: "POST",
-  //       body: formData,
-  //     });
-
-  //     const result = await response.json();
-  //     if (response.ok) {
-  //       setResponseMessage(result.message || "Upload successful");
-  //       setShowMessage(true);
-
-  //       if (selectedSection === "all") {
-  //         onComplete();
-  //       } else {
-  //         const updatedSections = [...processedSections, selectedSection];
-  //         setProcessedSections(updatedSections);
-
-  //         const remainingSections = SECTIONS.filter(
-  //           (section) => section.id !== "all" && !updatedSections.includes(section.id)
-  //         );
-
-  //         if (remainingSections.length === 0) {
-  //           onComplete();
-  //         } else {
-
-  //           //const sectionLetter = selectedSection.replace('section', '');
-  //           //console.log("sectionLetter",sectionLetter)
-  //           setResponseMessage(`Section ${selectedSection} processed. Please continue with the next section.`);
-  //           setShowMessage(true);
-  //           setSelectedSection(""); // Reset selection
-  //         }
-  //       }
-  //     } else {
-  //       setResponseMessage(result.error || "Something went wrong");
-  //       setShowMessage(true);
-  //     }
-  //   } catch (error) {
-  //     console.error("API error:", error);
-  //     setResponseMessage("Error connecting to the server");
-  //     setShowMessage(true);
-  //   } finally {
-  //     setIsProcessing(false);
-  //   }
-  // };
- 
 
   const fetchFiles = async (): Promise<string[] | null> => {
     try {
-      const response = await fetch('http://192.168.1.86:8000/api/list_files_in_directory/');
+      const response = await fetch('http://192.168.1.142:8000/api/list_files_in_directory/');
       const data = await response.json();
       console.log("Fetched files after delete:", data);
-  
+
       if (data && Array.isArray(data.files)) {
         setFiles(data.files); // still updates state
         return data.files;
@@ -776,12 +711,14 @@ const Step2Selection = ({
       setLoading(false);
     }
   };
-  
-  
+
+
 
 
   const handleFileChange = (event) => {
     setExtractedfile(event.target.value);
+    setSelectedSection("");
+    setProcessedSections([]);
 
   };
 
@@ -829,7 +766,7 @@ const Step2Selection = ({
         formData.append("extracted_data_filename", extractedfile);
       }
 
-      const response = await fetch("http://192.168.1.86:8000/api/process-and-insert/", {
+      const response = await fetch("http://192.168.1.142:8000/api/process-and-insert/", {
         method: "POST",
         body: formData,
       });
@@ -840,7 +777,7 @@ const Step2Selection = ({
         setShowMessage(true);
 
         if (selectedSection === "all") {
-          onComplete();
+          // onComplete();
         } else {
           const updatedSections = [...processedSections, selectedSection];
           setProcessedSections(updatedSections);
@@ -850,7 +787,7 @@ const Step2Selection = ({
           );
 
           if (remainingSections.length === 0) {
-            onComplete();
+            // onComplete();
           } else {
             setSelectedSection(""); // Reset selection
             setResponseMessage(`Section ${selectedSection} processed. Please continue with the next section.`);
@@ -874,13 +811,30 @@ const Step2Selection = ({
 
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h6" gutterBottom>
-        Step 2: Select Section Template
+      <Typography variant="h6" gutterBottom sx={{ mb: 2, color: '#005c99' }}>
+        Step 2: Select Company Name & Insert Data
       </Typography>
+      <Accordion sx={{ mb: 2 }}>
+        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+          <Typography variant="body1" sx={{ color: '#005c99', fontWeight: 'bold' }}>
+            Need help with processing files?
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography variant="body1" sx={{ mb: 2, color: '#005c99' }}>
+            Select the company name from the <strong>Select Excel File</strong> dropdown for which you want to insert data into the database. You can choose either <strong>Select All Sections</strong> or <strong>Select Individual Section</strong> from the dropdown. After making your selection, press the <strong>Submit to Database</strong> button.
+            <br /><br />
+            After completing all section parsing using all sections from either All Section dropdown or Individual Section dropdown, press the <strong>Processing Complete</strong> button to confirm that all steps are done.
+            <br /><br />
+            <em>Note:</em> When using the individual section option, ensure that all required data is inserted in one go. If the page is refreshed or you exit the project, progress will not be saved.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2, mb: 2 }}>
+
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 3 }}>
         <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="xlsx-files-label">Select XLSX File</InputLabel>
+          <InputLabel id="xlsx-files-label">Select Excel File</InputLabel>
           <Select
             labelId="xlsx-files-label"
             value={extractedfile}
@@ -947,7 +901,7 @@ const Step2Selection = ({
         <Typography>
           Selected File:{" "}
           <strong>{selectedFile ? selectedFile.name : "None"}</strong>
-        </Typography>
+              </Typography>
       </Box> */}
 
       <Box sx={{ my: 2 }}>
@@ -961,181 +915,206 @@ const Step2Selection = ({
         </Typography>
       </Box>
 
+      <Card elevation={3}>
+        <CardContent sx={{ p: 3 }}>
 
-      <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
-        <Button variant="outlined" onClick={onBack}>
-          Back
-        </Button>
 
-        <Button
-          variant="contained"
-          color="primary"
-          startIcon={<StorageIcon />}
-          disabled={!selectedFile || isProcessing}
-          onClick={handleSubmit}
-        >
-          {isProcessing ? <CircularProgress size={20} /> : "Submit to Database"}
-        </Button>
-        <>
-          <Button variant="contained" color="success" onClick={handleOpenDialog} disabled={!extractedfile}>
-            Processing Complete
-          </Button>
+          <Box sx={{ display: "flex", gap: 2, mt: 3 }}>
+            <Box sx={{ flex: 1 }}>
+              <Button variant="outlined" onClick={onBack}>
+                Back
+              </Button>
+            </Box>
 
-          <ConfirmationDialog
-            open={openDialog}
-            title="Confirm Completion"
-            message="Have you completed data insertion for all sections? Once confirmed, no further data can be added to this file unless you start from scratch"
-            onConfirm={handleConfirm}
-            onClose={handleCloseDialog}
+            <Box sx={{ flex: 1, display: "flex", justifyContent: "center" }}>
 
-          />
-        </>
-      </Box>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<StorageIcon />}
+                disabled={!extractedfile || !selectedFile || isProcessing}
+                onClick={handleSubmit}
+              >
+                {isProcessing ? <CircularProgress size={20} /> : "Submit to Database"}
+              </Button>
+            </Box>
+            <Box sx={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
 
-      <Dialog
-        open={showMessage}
-        onClose={() => setShowMessage(false)}
-        aria-labelledby="response-dialog-title"
-        PaperProps={{
-          sx: {
-            background: "#ffffff",
-            borderRadius: 2,
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-            minWidth: "400px",
-          }
-        }}
-      >
-        <DialogTitle
-          id="response-dialog-title"
-          sx={{
-            background: "#0EA5E9",
-            color: "white",
-            fontWeight: "bold",
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          {responseMessage?.toLowerCase().includes("success") ? (
-            <>
-              <CheckCircleIcon />
-              Success
-            </>
-          ) : responseMessage?.toLowerCase().includes("error") ? (
-            <>
-              <ErrorOutlineIcon />
-              Error
-            </>
-          ) : (
-            <>
-              <InfoIcon />
-              Message
-            </>
-          )}
-        </DialogTitle>
-        <DialogContent sx={{ py: 3 }}>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: 2,
-            p: 2,
-            borderRadius: 1,
-            // bgcolor: responseMessage?.toLowerCase().includes("success") 
-            //   ? "#e0f7fa" 
-            //   : responseMessage?.toLowerCase().includes("error")
-            //   ? "#ffebee"
-            //   : "#e3f2fd",
-            // color: responseMessage?.toLowerCase().includes("success")
-            //   ? "#00796b"
-            //   : responseMessage?.toLowerCase().includes("error")
-            //   ? "#c62828"
-            //   : "#1565c0",
-          }}>
-            {/* {responseMessage?.toLowerCase().includes("success") ? (
+              <Button variant="contained"
+                //color="#226279" 
+                sx={{
+                  backgroundColor: '#226279',
+                  color: 'white',
+                  '&:hover': {
+                    backgroundColor: '#1b4f61',
+                  },
+                  ml: 'auto',
+                }}
+                endIcon={<CheckCircleOutlineIcon />}
+                onClick={handleOpenDialog}
+                disabled={!extractedfile || !selectedFile || isProcessing}>
+                Processing Complete
+              </Button>
+
+            </Box>
+
+            <ConfirmationDialog
+              open={openDialog}
+              title="Confirm Completion"
+              message="Have you completed data insertion for all sections? Once confirmed, no further data can be added to this file unless you start from scratch!!"
+              onConfirm={handleConfirm}
+              onClose={handleCloseDialog}
+
+            />
+
+          </Box>
+
+          <Dialog
+            open={showMessage}
+            onClose={() => setShowMessage(false)}
+            aria-labelledby="response-dialog-title"
+            PaperProps={{
+              sx: {
+                background: "#ffffff",
+                borderRadius: 2,
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                minWidth: "400px",
+              }
+            }}
+          >
+            <DialogTitle
+              id="response-dialog-title"
+              sx={{
+                background: "#0EA5E9",
+                color: "white",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              {responseMessage?.toLowerCase().includes("success") ? (
+                <>
+                  <CheckCircleIcon />
+                  Success
+                </>
+              ) : responseMessage?.toLowerCase().includes("error") ? (
+                <>
+                  <ErrorOutlineIcon />
+                  Error
+                </>
+              ) : (
+                <>
+                  <InfoIcon />
+                  Message
+                </>
+              )}
+            </DialogTitle>
+            <DialogContent sx={{ py: 3 }}>
+              <Box sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 2,
+                p: 2,
+                borderRadius: 1,
+                // bgcolor: responseMessage?.toLowerCase().includes("success") 
+                //   ? "#e0f7fa" 
+                //   : responseMessage?.toLowerCase().includes("error")
+                //   ? "#ffebee"
+                //   : "#e3f2fd",
+                // color: responseMessage?.toLowerCase().includes("success")
+                //   ? "#00796b"
+                //   : responseMessage?.toLowerCase().includes("error")
+                //   ? "#c62828"
+                //   : "#1565c0",
+              }}>
+                {/* {responseMessage?.toLowerCase().includes("success") ? (
               <CheckCircleIcon color="success" />
             ) : responseMessage?.toLowerCase().includes("error") ? (
               <ErrorOutlineIcon color="error" />
             ) : (
               <InfoIcon color="info" />
             )} */}
-            <Typography variant="body1" sx={{ fontWeight: "bold", fontSize: 18 }}>
-              {responseMessage}
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions sx={{ p: 2, pt: 0 }}>
-          <Button
-            onClick={() => setShowMessage(false)}
-            variant="contained"
-            sx={{
-              background: "#0EA5E9",
-              "&:hover": {
-                opacity: 0.9,
-              },
-            }}
-          >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+                <Typography variant="body1" sx={{ fontWeight: "bold", fontSize: 18 }}>
+                  {responseMessage}
+                </Typography>
+              </Box>
+            </DialogContent>
+            <DialogActions sx={{ p: 2, pt: 0 }}>
+              <Button
+                onClick={() => setShowMessage(false)}
+                variant="contained"
+                sx={{
+                  background: "#0EA5E9",
+                  "&:hover": {
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
 
-      <Dialog
-        open={showSectionInfo}
-        onClose={() => setShowSectionInfo(false)}
-        aria-labelledby="section-info-dialog-title"
-        PaperProps={{
-          sx: {
-            background: "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)",
-            borderRadius: 2,
-            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
-            minWidth: "400px",
-          }
-        }}
-      >
-        <DialogTitle
-          id="section-info-dialog-title"
-          sx={{
-            background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
-            color: "white",
-            fontWeight: "bold",
-            display: "flex",
-            alignItems: "center",
-            gap: 1,
-          }}
-        >
-          <ErrorOutlineIcon />
-          Section Selection Required
-        </DialogTitle>
-        <DialogContent sx={{ py: 3 }}>
-          <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            p: 2,
-          }}>
-            <Typography variant="body1" sx={{ fontWeight: 500 }}>
-              Please select a section before uploading.
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              You can either select "All Sections" or choose a specific section to process.
-            </Typography>
-          </Box>
-        </DialogContent>
-        <DialogActions sx={{ p: 2, pt: 0 }}>
-          <Button
-            onClick={() => setShowSectionInfo(false)}
-            variant="contained"
-            sx={{
-              background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
-              "&:hover": {
-                opacity: 0.9,
-              },
+          <Dialog
+            open={showSectionInfo}
+            onClose={() => setShowSectionInfo(false)}
+            aria-labelledby="section-info-dialog-title"
+            PaperProps={{
+              sx: {
+                background: "linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)",
+                borderRadius: 2,
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                minWidth: "400px",
+              }
             }}
           >
-            Close
-          </Button>
-        </DialogActions>
-      </Dialog>
+            <DialogTitle
+              id="section-info-dialog-title"
+              sx={{
+                background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
+                color: "white",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <ErrorOutlineIcon />
+              Section Selection Required
+            </DialogTitle>
+            <DialogContent sx={{ py: 3 }}>
+              <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2,
+                p: 2,
+              }}>
+                <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                  Please select a section before uploading.
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  You can either select "All Sections" or choose a specific section to process.
+                </Typography>
+              </Box>
+            </DialogContent>
+            <DialogActions sx={{ p: 2, pt: 0 }}>
+              <Button
+                onClick={() => setShowSectionInfo(false)}
+                variant="contained"
+                sx={{
+                  background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
+                  "&:hover": {
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

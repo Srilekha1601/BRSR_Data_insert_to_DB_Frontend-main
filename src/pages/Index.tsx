@@ -36,7 +36,7 @@ const Index = () => {
         <>
           <StepIndicator currentStep={currentStep} totalSteps={2} />
           <Box sx={{ mt: 4 }}>
-            {currentStep === 1 && <Step1Upload onNext={handleNext} />}
+            {currentStep === 1 && <Step1Upload onNext={handleNext} onBack={handleBack} />}
             {currentStep === 2 && (
               <Step2Selection
                 onBack={handleBack}

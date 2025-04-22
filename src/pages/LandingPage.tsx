@@ -67,15 +67,22 @@ const LandingPage = () => {
             animation: `${fadeInUp} 0.6s ease-out`,
           }}
         >
-          Welcome to BRSR Tool
+          Welcome to BRSRSync
+        </Typography>
+
+
+        <Typography variant="subtitle1" color="text.secondary" sx={{ mt: 1 }}>
+          Effortless BRSR data integration, from XML to database.
         </Typography>
 
         <Typography
-          variant="subtitle1"
+          variant="h6" 
           sx={{
-            mb: 5,
+            mb: 2,
             color: "text.secondary",
             animation: `${fadeInUp} 0.8s ease-out`,
+            mt: 1,
+            
           }}
         >
           Choose how you want to begin
@@ -87,7 +94,7 @@ const LandingPage = () => {
             size="large"
             color="primary"
             onClick={() => navigate("/brsrxmlupload")}
-            sx={{ borderRadius: "12px" }} 
+            sx={{ borderRadius: "12px" }}
           >
             Start from Scratch
           </Button>
@@ -97,7 +104,7 @@ const LandingPage = () => {
             size="large"
             color="primary"
             onClick={() => navigate("/brsrdataentry")}
-            sx={{ borderRadius: "12px" }} 
+            sx={{ borderRadius: "12px" }}
           >
             Insert Data Directly
           </Button>

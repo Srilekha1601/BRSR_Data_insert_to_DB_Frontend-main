@@ -26,16 +26,18 @@ export default {
 				background: 'hsl(var(--background))',
 				foreground: 'hsl(var(--foreground))',
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
+					//DEFAULT: 'hsl(var(--primary))',
 					foreground: 'hsl(var(--primary-foreground))',
 					light: '#4dabf7',
 					DEFAULT: '#1a91eb',
 					dark: '#0c71c3'
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
+					light: '#70d6ff', // Light cyan, complements #1a91eb well
+					DEFAULT: '#38bdf8', // Slightly teal/cyan blue
+					dark: '#1e90ff', // Dodger Blue for contrast
 					foreground: 'hsl(var(--secondary-foreground))'
-				},
+				  },
 				destructive: {
 					DEFAULT: 'hsl(var(--destructive))',
 					foreground: 'hsl(var(--destructive-foreground))'

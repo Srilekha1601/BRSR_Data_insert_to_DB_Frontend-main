@@ -7,6 +7,10 @@ import { Box } from "@mui/material";
 const BrsrUpload = () => {
   const navigate = useNavigate();
 
+  const handleBack = () => {
+    navigate("/home");
+  };
+
   const handleNext = () => {
     navigate("/brsrdataentry");
   };
@@ -15,7 +19,7 @@ const BrsrUpload = () => {
     <Layout>
       <StepIndicator currentStep={1} totalSteps={2} />
       <Box sx={{ mt: 4 }}>
-        <Step1Upload onNext={handleNext} />
+        <Step1Upload onNext={handleNext} onBack={handleBack}/>
       </Box>
     </Layout>
   );

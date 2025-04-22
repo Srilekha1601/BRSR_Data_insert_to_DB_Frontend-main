@@ -5,7 +5,8 @@ import {
   DialogContent,
   DialogActions,
   Button,
-  Typography
+  Typography,
+  Box,
 } from '@mui/material';
 
 const ConfirmationDialog = ({ open, title, message, onConfirm, onClose }) => {
@@ -23,13 +24,35 @@ const ConfirmationDialog = ({ open, title, message, onConfirm, onClose }) => {
         }
       }}
     >
-      <DialogTitle id="confirmation-dialog-title">{title}</DialogTitle>
-      <DialogContent>
-        <Typography>{message}</Typography>
+      <DialogTitle id="confirmation-dialog-title"
+        sx={{
+          background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
+          color: "white",
+          fontWeight: "bold",
+          display: "flex",
+          alignItems: "center",
+          gap: 1,
+        }}>
+        {title}
+      </DialogTitle>
+      <DialogContent sx={{ py: 3 }}>
+        <Box sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 2,
+          p: 2,
+        }}>
+          <Typography variant="body1" sx={{ fontWeight: "bold", fontSize: 18 }}>{message}</Typography>
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>No</Button>
-        <Button onClick={onConfirm} color="success" variant="contained">
+        <Button onClick={onConfirm} sx={{
+          background: "linear-gradient(90deg, #0EA5E9 0%, #38bdf8 100%)",
+          "&:hover": {
+            opacity: 0.9,
+          },
+        }} variant="contained">
           Yes
         </Button>
       </DialogActions>
