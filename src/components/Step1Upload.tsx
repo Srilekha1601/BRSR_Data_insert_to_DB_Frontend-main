@@ -5,7 +5,9 @@ import {
   CardContent,
   Typography,
   Button,
-  Alert
+  Alert,
+  TextField,
+  Grid,
 } from "@mui/material";
 import FileUpload, { FileUploadRef } from "./FileUpload";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
@@ -20,6 +22,8 @@ import {
 } from "@mui/material";
 import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { InfoIcon } from "lucide-react";
+
 
 interface Step1Props {
   onBack: () => void;
@@ -41,13 +45,17 @@ const Step1Upload = ({ onNext, onBack }: Step1Props) => {
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const [showMessage, setShowMessage] = useState(false);
   const [showSectionInfo, setShowSectionInfo] = useState(false);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [selectedSection, setSelectedSection] = useState<string>("");
   const [selectedFile, setSelectedFile] = useState<File[]>([]);
   const xmlFileUploadRef = useRef<FileUploadRef>(null);
   const excelFileUploadRef = useRef<FileUploadRef>(null);
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
-
+  const [companyName, setCompanyName] = useState('');
+  const [year, setYear] = useState('');
+  const [open, setOpen] = useState(false);
+  const [code, setCode] = useState('y');
+  const [message, setMessage] = useState('');
   const handleReset = () => {
     // Reset only XML file upload component
     if (xmlFileUploadRef.current) {
@@ -82,7 +90,7 @@ const Step1Upload = ({ onNext, onBack }: Step1Props) => {
     formData.append("template", excelTemplate);
 
     try {
-      const response = await fetch("http://192.168.1.142:8000//api/process/", {
+      const response = await fetch("http://192.168.1.86:8000//api/process/", {
         method: "POST",
         body: formData,
       });
@@ -102,6 +110,37 @@ const Step1Upload = ({ onNext, onBack }: Step1Props) => {
     }
   };
 
+
+
+  const handleSearch = async () => {
+    const payload = {
+      company_name: companyName,
+      year: year
+    };
+
+    try {
+      const response = await fetch("http://192.168.1.86:8000//api/check_company_name_year/", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = await response.json();
+      setMessage(result.message);
+      setCode(result.code);
+      setOpen(true);
+      if (result.status !== 'success') {
+        setCode('n');
+      }
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      setCode('y');
+    }
+  };
+
   const handleExitConfirm = () => {
     setExitDialogOpen(false);
     onBack();
@@ -111,10 +150,99 @@ const Step1Upload = ({ onNext, onBack }: Step1Props) => {
     setExitDialogOpen(false);
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
   return (
     <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
       <Typography variant="h6" gutterBottom sx={{ mb: 1, color: '#005c99' }}>
-        Step 1: Upload XML
+        Step 1: Upload Company code & year
+      </Typography>
+      <Box sx={{ display: "flex", flexDirection: "row", gap: 2, alignItems: "center" }}>
+        <TextField
+          fullWidth
+          label="Company Name"
+          variant="outlined"
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          label="Year"
+          variant="outlined"
+          value={year}
+          onChange={(e) => setYear(e.target.value)}
+        />
+        <div>
+          
+          <Button variant="outlined" color="primary" onClick={handleSearch}  sx={{ height: '50px' }}>
+            Search
+          </Button>
+
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="response-dialog-title"
+            PaperProps={{
+              sx: {
+                background: "#ffffff",
+                borderRadius: 2,
+                boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+                minWidth: "400px",
+              }
+            }}
+          >
+            <DialogTitle
+              id="response-dialog-title"
+              sx={{
+                background: "#0EA5E9",
+                color: "white",
+                fontWeight: "bold",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <InfoIcon />
+              Response
+            </DialogTitle>
+
+            <DialogContent sx={{ py: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  p: 2,
+                  borderRadius: 1,
+                }}
+              >
+                <Typography variant="body1" sx={{ fontWeight: "bold", fontSize: 18 }}>
+                  {message}
+                </Typography>
+              </Box>
+            </DialogContent>
+
+            <DialogActions sx={{ p: 2, pt: 0 }}>
+              <Button
+                onClick={handleClose}
+                variant="contained"
+                sx={{
+                  background: "#0EA5E9",
+                  "&:hover": {
+                    opacity: 0.9,
+                  },
+                }}
+              >
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+
+        </div>
+      </Box>
+      <Typography variant="h6" gutterBottom sx={{ mb: 1, color: '#005c99' }}>
+        Step 2: Upload XML
       </Typography>
       <Accordion sx={{ mb: 2 }}>
         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -137,7 +265,9 @@ const Step1Upload = ({ onNext, onBack }: Step1Props) => {
       <Box sx={{
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
-        gap: 3
+        gap: 3,
+        pointerEvents: (code === 'y' || !companyName) ? 'none' : 'auto',
+        opacity: (code === 'y' || !companyName) ? 0.5 : 1,
       }}>
         <Box sx={{ flex: 1 }}>
           <FileUpload
