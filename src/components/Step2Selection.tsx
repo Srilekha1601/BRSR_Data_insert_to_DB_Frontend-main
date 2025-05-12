@@ -439,7 +439,10 @@ import {
   Grid,
   Checkbox,
   ListItemText,
+  Popper,
+  Menu
 } from "@mui/material";
+import { SelectChangeEvent } from '@mui/material';
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import StorageIcon from "@mui/icons-material/Storage";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -582,6 +585,13 @@ const Step2Selection = ({
   const [deletefile, setDeletefile] = useState(false)
   const [openDialog, setOpenDialog] = useState(false);
   const [fileCount, setFileCount] = useState(0);
+  const [selectedCategoryId, setSelectedCategoryId] = useState<number | string>('');
+  const [selectedSubCategoryId, setSelectedSubCategoryId] = useState<number | string>('');
+  const [categories, setCategories] = useState<{ industry_category: string; industry_category_id: number }[]>([]);
+  const [subCategories, setSubCategories] = useState<{ industry_subcategory: string; industry_subcategory_id: number; industry_category_id: number; }[]>([]);
+  const [selectedPairs, setSelectedPairs] = useState([]);
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -594,14 +604,9 @@ const Step2Selection = ({
   const handleCloseDialog = () => setOpenDialog(false);
 
   const handleConfirm = async () => {
-    // if (fileCount === 0) {
-    //   navigate('/completion');
-    //   setOpenDialog(false);
-    //   return;
-    // }
 
     try {
-      const response = await fetch("http://192.168.1.142:8000/api/delete_inserted_files/", {
+      const response = await fetch("http://192.168.1.86:8000/api/delete_inserted_files/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -616,13 +621,10 @@ const Step2Selection = ({
       if (response.ok) {
         const text = await response.text();
         const result = JSON.parse(text);
-        //console.log("result", result);
         setResponseMessage(result.message);
         setShowMessage(true);
-        
-        // If backend says "No files found", navigate to completion
 
-        // Otherwise update list and reset selection
+
         setTimeout(async () => {
           const files = await fetchFiles();
           setExtractedfile("");
@@ -635,19 +637,21 @@ const Step2Selection = ({
       } else {
         const text = await response.text();
         const result = JSON.parse(text);
-        //console.log("result", result);
         setResponseMessage(result.error);
         setShowMessage(true);
-        //console.error("API error:", response.statusText);
       }
     } catch (error) {
       setResponseMessage(error);
       setShowMessage(true);
-      //console.error("Network error:", error);
     } finally {
       setOpenDialog(false);
     }
   };
+
+  // const handelcategoryChange = async (event: any) => {
+  //   const categoryId = event.target.value;
+  //   setSelectedCategory(categoryId);  
+  // }
 
 
   const handleSectionChange = async (event: any) => {
@@ -659,7 +663,6 @@ const Step2Selection = ({
 
     try {
       if (sectionId === "all") {
-        // Handle "All Sections" selection
         const allSections = SECTIONS.filter((s) => s.id !== "all");
         const files = await Promise.all(
           allSections.map(async (s) => {
@@ -673,7 +676,6 @@ const Step2Selection = ({
         //setSelectedFile(files[0]); // Set the first file as selected
         setSelectedFile(files);
       } else {
-        // Handle individual section selection
         const templatePath = Array.isArray(section.templatePath) ? section.templatePath[0] : section.templatePath;
         const res = await fetch(templatePath);
         const blob = await res.blob();
@@ -689,16 +691,60 @@ const Step2Selection = ({
   const isAllSelected = selectedSection === "all";
   const isIndividualSelected = selectedSection && selectedSection !== "all";
 
+  const fetchIndustryCategories = async (): Promise<void> => {
+    try {
+      const response = await fetch('http://192.168.1.86:8000//api/industry-categories/');
+      const data = await response.json();
+
+
+      if (data && Array.isArray(data)) {
+        setCategories(data);
+      } else {
+        console.error("No categories found in the response.");
+      }
+    } catch (error) {
+      console.error("Error fetching industry categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchIndustryCategories();
+  }, []);
+
+
+  const fetchSubCategories = async (categoryId: number): Promise<void> => {
+    try {
+      const response = await fetch(`http://192.168.1.86:8000/api/industry-subcategories/${categoryId}/`);
+      const data = await response.json();
+
+
+      if (data && Array.isArray(data)) {
+        setSubCategories(data);
+      } else {
+        console.error("No subcategories found in the response.");
+      }
+    } catch (error) {
+      console.error("Error fetching subcategories:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    if (selectedCategoryId) {
+      fetchSubCategories(Number(selectedCategoryId));
+    }
+  }, [selectedCategoryId]);
+
+
 
 
   const fetchFiles = async (): Promise<string[] | null> => {
     try {
-      const response = await fetch('http://192.168.1.142:8000/api/list_files_in_directory/');
+      const response = await fetch('http://192.168.1.86:8000/api/list_files_in_directory/');
       const data = await response.json();
-      console.log("Fetched files after delete:", data);
 
       if (data && Array.isArray(data.files)) {
-        setFiles(data.files); // still updates state
+        setFiles(data.files);
         return data.files;
       } else {
         console.error("No files found in the response.");
@@ -711,8 +757,19 @@ const Step2Selection = ({
       setLoading(false);
     }
   };
+  // const handleAddPair = () => {
+  //   const category = categories.find(c => c.industry_category_id === selectedCategoryId);
+  //   const subcategory = subCategories.find(s => s.industry_subcategory_id === selectedSubCategoryId);
 
+  //   const newPair = {
+  //     categoryId: selectedCategoryId,
+  //     categoryName: category?.industry_category || "Unknown Category",
+  //     subCategoryId: selectedSubCategoryId,
+  //     subCategoryName: subcategory?.industry_subcategory || "Unknown Subcategory"
+  //   };
 
+  //   setSelectedPairs([...selectedPairs, newPair]);
+  // };
 
 
   const handleFileChange = (event) => {
@@ -723,6 +780,24 @@ const Step2Selection = ({
   };
 
 
+  const handleCategoryChange = (event: SelectChangeEvent<string>) => {
+    const selectedCategory = event.target.value;
+    const category = categories.find((cat) => cat.industry_category === selectedCategory);
+
+    if (category) {
+      setSelectedCategoryId(category.industry_category_id);
+      setSelectedSubCategoryId('');
+    }
+  };
+
+
+  const handleSubCategoryChange = (event: SelectChangeEvent<string>) => {
+    const selectedSubCategory = event.target.value;
+    const category = subCategories.find((cat) => cat.industry_subcategory === selectedSubCategory);
+    if (category) {
+      setSelectedSubCategoryId(category.industry_subcategory_id);
+    }
+  };
 
 
   const handleSubmit = async () => {
@@ -737,7 +812,6 @@ const Step2Selection = ({
     try {
       const formData = new FormData();
       if (selectedSection === "all") {
-        // Process all sections
         const allSections = SECTIONS.filter((s) => s.id !== "all");
         for (const section of allSections) {
           const templatePath = Array.isArray(section.templatePath) ? section.templatePath[0] : section.templatePath;
@@ -747,9 +821,11 @@ const Step2Selection = ({
           const file = new File([blob], fileName, { type: blob.type });
           formData.append("section_template_file", file);
           formData.append("extracted_data_filename", extractedfile);
+          formData.append("industry_category_id", String(selectedCategoryId));
+          formData.append("industry_subcategory_id", String(selectedSubCategoryId));
+
         }
       } else {
-        // Process individual section
         const section = SECTIONS.find((s) => s.id === selectedSection);
         if (!section) {
           setResponseMessage("Section not found.");
@@ -764,9 +840,11 @@ const Step2Selection = ({
         const file = new File([blob], fileName, { type: blob.type });
         formData.append("section_template_file", file);
         formData.append("extracted_data_filename", extractedfile);
+        formData.append("industry_category_id", String(selectedCategoryId));
+        formData.append("industry_subcategory_id", String(selectedSubCategoryId));
       }
 
-      const response = await fetch("http://192.168.1.142:8000/api/process-and-insert/", {
+      const response = await fetch("http://192.168.1.86:8000/api/process-and-insert/", {
         method: "POST",
         body: formData,
       });
@@ -777,7 +855,6 @@ const Step2Selection = ({
         setShowMessage(true);
 
         if (selectedSection === "all") {
-          // onComplete();
         } else {
           const updatedSections = [...processedSections, selectedSection];
           setProcessedSections(updatedSections);
@@ -787,9 +864,8 @@ const Step2Selection = ({
           );
 
           if (remainingSections.length === 0) {
-            // onComplete();
           } else {
-            setSelectedSection(""); // Reset selection
+            setSelectedSection("");
             setResponseMessage(`Section ${selectedSection} processed. Please continue with the next section.`);
             setShowMessage(true);
           }
@@ -807,7 +883,7 @@ const Step2Selection = ({
     }
   };
 
-  console.log("selectedFile", selectedFile);
+
 
   return (
     <Box sx={{ p: 3 }}>
@@ -822,7 +898,7 @@ const Step2Selection = ({
         </AccordionSummary>
         <AccordionDetails>
           <Typography variant="body1" sx={{ mb: 2, color: '#005c99' }}>
-            Select the company name from the <strong>Select Excel File</strong> dropdown for which you want to insert data into the database. You can choose either <strong>Select All Sections</strong> or <strong>Select Individual Section</strong> from the dropdown. After making your selection, press the <strong>Submit to Database</strong> button.
+           From the  <strong>'Select Excel File'</strong> dropdown, choose the company for which you want to insert data into the database. Then, select the <strong>industry category </strong> and <strong>industry subcategory</strong> from the respective dropdowns. Next, choose either <strong>'Select All Sections'</strong> or <strong>'Select Individual Section' </strong>. Once you've made all your selections, click the <strong>'Submit to Database'</strong> button.
             <br /><br />
             After completing all section parsing using all sections from either All Section dropdown or Individual Section dropdown, press the <strong>Processing Complete</strong> button to confirm that all steps are done.
             <br /><br />
@@ -842,7 +918,6 @@ const Step2Selection = ({
             label="Select XLSX File"
           >
             {files.map((file, index) => {
-              // Split on "_extracted_data_" and take the first part (company name)
               const displayName = file.split("_extracted_data_")[0];
               return (
                 <MenuItem key={index} value={file}>
@@ -852,8 +927,70 @@ const Step2Selection = ({
             })}
           </Select>
         </FormControl>
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected || !extractedfile}>
+          <InputLabel id="all-section-label">Select category</InputLabel>
+          <Select
+            labelId="all-section-label"
+            value={categories.find(cat => cat.industry_category_id === selectedCategoryId)?.industry_category || ''}
+            onChange={handleCategoryChange}
+            label="Select category"
+          >
+            {categories.map((categoryItem) => (
+              <MenuItem key={categoryItem.industry_category_id} value={categoryItem.industry_category}>
+                {categoryItem.industry_category}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
 
-        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected}>
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected || !extractedfile || !selectedCategoryId}>
+          <InputLabel id="all-section-label">Select sub category</InputLabel>
+          <Select
+            labelId="all-section-label"
+            value={subCategories.find(cat => cat.industry_subcategory_id === selectedSubCategoryId)?.industry_subcategory || ''}
+            onChange={handleSubCategoryChange}
+            label="Select sub category"
+            MenuProps={{
+              PaperProps: {
+                style: {
+                  maxHeight: 300,
+                  width: '200',
+                },
+              },
+            }}
+          >
+            {subCategories.map((categoryItem) => (
+              <MenuItem key={categoryItem.industry_subcategory_id} value={categoryItem.industry_subcategory}>
+                {categoryItem.industry_subcategory}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        {/* <Box
+          sx={{
+            height: "80px", // or any desired height
+            display: "flex",
+            justifyContent: "left",
+            alignItems: "center",
+            mr: "0px" // vertically center the button
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={handleAddPair}
+            disabled={!selectedCategoryId || !selectedSubCategoryId}
+            sx={{
+              padding: "2px 10px",
+              minHeight: "50px",
+              fontSize: "0.75rem",
+              lineHeight: 1,
+            }}
+          >
+            Add Combination
+          </Button>
+        </Box> */}
+
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isIndividualSelected || !selectedCategoryId || !selectedSubCategoryId}>
           <InputLabel id="all-section-label">Select All Sections</InputLabel>
           <Select
             labelId="all-section-label"
@@ -868,7 +1005,7 @@ const Step2Selection = ({
 
 
 
-        <FormControl fullWidth sx={{ mb: 2 }} disabled={isAllSelected}>
+        <FormControl fullWidth sx={{ mb: 2 }} disabled={isAllSelected || !selectedCategoryId || !selectedSubCategoryId}>
           <InputLabel id="section-label">Select Individual Section</InputLabel>
           <Select
             labelId="section-label"
@@ -903,6 +1040,32 @@ const Step2Selection = ({
           <strong>{selectedFile ? selectedFile.name : "None"}</strong>
               </Typography>
       </Box> */}
+      {/* <Box sx={{ my: 2 }}>
+        <Typography>
+          Selected Combinations:{" "}
+          <strong>
+            {selectedPairs.length > 0
+              ? selectedPairs
+                .map(pair => `${pair.categoryName} → ${pair.subCategoryName}`)
+                .join(", ")
+              : "None"}
+          </strong>
+        </Typography>
+      </Box> */}
+
+
+
+      <Box sx={{ my: 2 }}>
+        <Typography>
+          Selected Category & Subcategory:{" "}
+          <strong>
+            {selectedCategoryId && selectedSubCategoryId
+              ? `${categories.find(cat => cat.industry_category_id === selectedCategoryId)?.industry_category || "N/A"} → ${subCategories.find(sub => sub.industry_subcategory_id === selectedSubCategoryId)?.industry_subcategory || "N/A"}`
+              : "None"}
+          </strong>
+        </Typography>
+      </Box>
+
 
       <Box sx={{ my: 2 }}>
         <Typography>
